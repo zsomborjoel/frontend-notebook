@@ -2,6 +2,7 @@ import * as esbuild from 'esbuild-wasm';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { unpkgPathPlugin } from './plugin/UnpackagePlugin';
+import { fetchPlugin } from './plugin/FetchPlugin';
 
 const App = (): any => {
     const ref = useRef<any>();
@@ -29,14 +30,14 @@ const App = (): any => {
             entryPoints: ['index.js'],
             bundle: true,
             write: false,
-            plugins: [unpkgPathPlugin],
+            plugins: [unpkgPathPlugin(), fetchPlugin(input)],
             define: {
                 'process.env.NODE_ENV': '"production"',
                 global: 'window',
             },
         });
 
-        setCode(result.code);
+        setCode(result.outputFiles[0].text);
     };
 
     return (
@@ -47,6 +48,7 @@ const App = (): any => {
                     Submit
                 </button>
             </div>
+            <pre>{code}</pre>
         </div>
     );
 };
