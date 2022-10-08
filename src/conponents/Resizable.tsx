@@ -13,17 +13,19 @@ interface ResizableProps {
  * @param childten - component
  * @returns A resize react component
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     let resizableProps: ResizableBoxProps;
     const [innerHeight, setInnerHeight] = useState(window.innerHeight);
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
+    // To not let page size change reset ResizeableBox width
+    const [width, setWidth] = useState(window.innerWidth * 0.75);
+
     // Debouncing for performance improvement
     useEffect(() => {
         let timer: any;
 
-        const listener = (): void => {
+        const listener = (): any => {
             if (timer) {
                 clearTimeout(timer);
             }
@@ -31,6 +33,10 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
             timer = setTimeout(() => {
                 setInnerHeight(window.innerHeight);
                 setInnerWidth(window.innerWidth);
+
+                if (window.innerWidth * 0.75 < width) {
+                    setWidth(window.innerWidth * 0.75);
+                }
             }, 100);
         };
 
@@ -39,7 +45,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
         return () => {
             window.removeEventListener('resize', listener);
         };
-    }, []);
+    }, [width]);
 
     if (direction === 'horizontal') {
         resizableProps = {
@@ -47,8 +53,11 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
             minConstraints: [innerWidth * 0.2, Infinity],
             maxConstraints: [innerWidth * 0.75, Infinity],
             height: Infinity,
-            width: innerWidth * 0.75,
+            width,
             resizeHandles: ['e'],
+            onResizeStop: (_, data) => {
+                setWidth(data.size.width);
+            },
         };
     } else {
         resizableProps = {
