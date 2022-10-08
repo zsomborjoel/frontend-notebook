@@ -6,6 +6,7 @@ import { fetchPlugin } from './plugin/FetchPlugin';
 
 const App = (): any => {
     const ref = useRef<any>();
+    const iframe = useRef<any>();
     const [input, setInput] = useState<string>('');
     const [code, setCode] = useState<string>('');
 
@@ -37,9 +38,29 @@ const App = (): any => {
             },
         });
 
-        setCode(result.outputFiles[0].text);
+        //setCode(result.outputFiles[0].text);
+
+        iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
     };
 
+    // double script tag will be split boundle - as browser looking for closed script tag
+    const html = `
+    <html>
+      <head></head>
+      <body>
+        <div id="root"></div>
+        <script>
+          window.addEventListener('message', (event) => {
+            eval(event.data);
+          }, false);
+        </script>
+      </body>
+    </html>
+  `;
+
+
+    // iframe - sandbox we don't have direct acces between parent and child, only allows html like this by default
+    // iframe - srcDoc using content from local file
     return (
         <div>
             <textarea value={input} onChange={(e) => setInput(e.target.value)} />
@@ -49,6 +70,7 @@ const App = (): any => {
                 </button>
             </div>
             <pre>{code}</pre>
+            <iframe title="test" ref={iframe} sandbox="allow-scripts" srcDoc={html} />
         </div>
     );
 };
