@@ -1,5 +1,6 @@
-import 'bulmaswatch/superhero/bulmaswatch.min.css';
+// eslint-disable-next-line no-use-before-define
 import React, { useState } from 'react';
+import 'bulmaswatch/superhero/bulmaswatch.min.css';
 import ReactDOM from 'react-dom';
 import CodeEditor from './conponents/CodeEditor';
 import Preview from './conponents/Preview';

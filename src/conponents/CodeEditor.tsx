@@ -1,6 +1,7 @@
+// eslint-disable-next-line no-use-before-define
+import React, { useRef } from 'react';
 import './code-editor.css';
 import './syntax.css';
-import React, { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
