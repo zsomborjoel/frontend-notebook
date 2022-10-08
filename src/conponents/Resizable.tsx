@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './resizable.css';
 import { ResizableBox, ResizableBoxProps } from 'react-resizable';
+import { clearTimeout } from 'timers';
 
 interface ResizableProps {
     direction: 'horizontal' | 'vertical';
@@ -18,10 +19,19 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     const [innerHeight, setInnerHeight] = useState(window.innerHeight);
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
+    // Debouncing for performance improvement
     useEffect(() => {
+        let timer: any;
+
         const listener = (): void => {
-            setInnerHeight(window.innerHeight);
-            setInnerWidth(window.innerWidth);
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            timer = setTimeout(() => {
+                setInnerHeight(window.innerHeight);
+                setInnerWidth(window.innerWidth);
+            }, 100);
         };
 
         window.addEventListener('resize', listener);
