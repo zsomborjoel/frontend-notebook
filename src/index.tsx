@@ -7,7 +7,6 @@ import CodeCell from './conponents/CodeCell';
 const App = (): any => (
     <div>
         <CodeCell />
-        <CodeCell />
     </div>
 );
 
