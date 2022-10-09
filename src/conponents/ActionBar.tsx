@@ -20,16 +20,19 @@ const ActionBar: React.FC<ActionBarProps> = ({ id }) => {
             <button type="button" className="button is-primary is-small" onClick={() => moveCell(id, 'up')}>
                 <span className="icon">
                     <i className="fas fa-arrow-up" />
+                    up
                 </span>
             </button>
             <button type="button" className="button is-primary is-small" onClick={() => moveCell(id, 'down')}>
                 <span className="icon">
                     <i className="fas fa-arrow-down" />
+                    down
                 </span>
             </button>
             <button type="button" className="button is-primary is-small" onClick={() => deleteCell(id)}>
                 <span className="icon">
                     <i className="fas fa-times" />
+                    del
                 </span>
             </button>
         </div>
