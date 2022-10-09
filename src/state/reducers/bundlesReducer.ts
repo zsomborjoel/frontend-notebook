@@ -15,7 +15,7 @@ interface BundlesState {
 
 const initialState: BundlesState = {};
 
-export const reducer = produce((state: BundlesState = initialState, action: Action): BundlesState => {
+const reducer = produce((state: BundlesState = initialState, action: Action): BundlesState => {
     switch (action.type) {
         case ActionType.BUNDLE_START:
             state[action.payload.cellId] = {
@@ -35,3 +35,5 @@ export const reducer = produce((state: BundlesState = initialState, action: Acti
             return state;
     }
 }, initialState);
+
+export default reducer;

@@ -21,7 +21,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
 
     // Toggling where is click
     useEffect(() => {
-        const listener = (event: MouseEvent): void => {
+        const listener = (event: MouseEvent): any => {
             if (ref.current && event.target && ref.current.contains(event.target as Node)) {
                 // Inside editor
                 return;
@@ -48,7 +48,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
     return (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         <div className="text-editor card" onClick={() => setEditing(true)}>
-            <div className="card.content">
+            <div className="card-content">
                 <MDEditor.Markdown source={cell.content || 'Click to edit'} />
             </div>
         </div>

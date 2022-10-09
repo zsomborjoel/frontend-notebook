@@ -1,0 +1,10 @@
+- This is a text area
+- You can create notes here
+
+**Also in a code format**
+
+`print('Hi there')`
+
+-----
+
+show(<h1>Hi there</h1>);

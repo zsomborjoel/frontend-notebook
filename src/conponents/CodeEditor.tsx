@@ -13,15 +13,11 @@ interface CodeEditorProps {
     onChange(value: string): void;
 }
 
-/**
- * Responsible to initialize the MonacoEditor on the screen
- * @param param0
- * @returns
- */
+// eslint-disable-next-line react/prop-types
 const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     const editorRef = useRef<any>();
-
     // No default onChange in Editor
+
     const onEditorDidMount: EditorDidMount = (getValue, monacoEditor) => {
         editorRef.current = monacoEditor;
         monacoEditor.onDidChangeModelContent(() => {
@@ -32,7 +28,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
 
         const highlighter = new Highlighter(
             // @ts-ignore
-            window.MonacoEnvironment,
+            window.monaco,
             codeShift,
             monacoEditor
         );
@@ -43,9 +39,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
             () => {}
         );
     };
-
     // Automatic code formating
-    const onFormatClick = (): void => {
+
+    const onFormatClick = (): any => {
         // get current value from editor
         const unformatted = editorRef.current.getModel().getValue();
 
@@ -66,7 +62,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
 
     return (
         <div className="editor-wrapper">
-            <button className="button button-format is-primary is-small" type="button" onClick={onFormatClick}>
+            <button type="button" className="button button-format is-primary is-small" onClick={onFormatClick}>
                 Format
             </button>
             <MonacoEditor

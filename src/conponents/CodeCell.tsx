@@ -1,30 +1,31 @@
 // eslint-disable-next-line no-use-before-define
 import React, { useEffect } from 'react';
 import './code-cell.css';
-import { clearTimeout } from 'timers';
 import CodeEditor from './CodeEditor';
 import Preview from './Preview';
 import Resizable from './Resizable';
 import { Cell } from '../state';
 import { useActions } from '../hooks/UseActions';
 import { useTypedSelector } from '../hooks/UseTypesSelector';
+import { useCumulativeCode } from '../hooks/UseCumulativeCode';
 
 interface CodeCellProps {
     cell: Cell;
 }
 
-const CodeCell: React.FC<CodeCellProps> = ({ cell }): any => {
+const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     const { updateCell, createBundle } = useActions();
     const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+    const cumulativeCode = useCumulativeCode(cell.id);
 
     useEffect(() => {
         if (!bundle) {
-            createBundle(cell.id, cell.content);
+            createBundle(cell.id, cumulativeCode);
             return;
         }
 
         const timer = setTimeout(async () => {
-            createBundle(cell.id, cell.content);
+            createBundle(cell.id, cumulativeCode);
         }, 750);
 
         // Automatically called after next time use effect called
@@ -32,17 +33,23 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }): any => {
         return () => {
             clearTimeout(timer);
         };
-    }, [cell.content, cell.id, createBundle]);
+    }, [cumulativeCode, cell.id, createBundle]);
 
     return (
         <Resizable direction="vertical">
-            <div style={{ height: 'calc(100% - 10px)', display: 'flex', flexDirection: 'row' }}>
+            <div
+                style={{
+                    height: 'calc(100% - 10px)',
+                    display: 'flex',
+                    flexDirection: 'row',
+                }}
+            >
                 <Resizable direction="horizontal">
-                    <CodeEditor initialValue={cell.content} onChange={(value) => updateCell(value)} />
+                    <CodeEditor initialValue={cell.content} onChange={(value) => updateCell(cell.id, value)} />
                 </Resizable>
                 <div className="progress-wrapper">
                     {!bundle || bundle.loading ? (
-                        <div className="progress-coder">
+                        <div className="progress-cover">
                             <progress className="progress is-small is-primary" max="100">
                                 Loading
                             </progress>

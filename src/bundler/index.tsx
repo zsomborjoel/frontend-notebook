@@ -5,7 +5,7 @@ import { fetchPlugin } from './plugin/FetchPlugin';
 let service: esbuild.Service;
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default async (rawCode: string): Promise<any> => {
+const bundle = async (rawCode: string): Promise<any> => {
     if (!service) {
         service = await esbuild.startService({
             worker: true,
@@ -23,14 +23,20 @@ export default async (rawCode: string): Promise<any> => {
                 'process.env.NODE_ENV': '"production"',
                 global: 'window',
             },
+            jsxFactory: '_React.createElement',
+            jsxFragment: '_React.Fragment',
         });
 
-        // For same return type
         return {
             code: result.outputFiles[0].text,
             err: '',
         };
-    } catch (err: any) {
-        return err.message;
+    } catch (err) {
+        return {
+            code: '',
+            err: 'error on bundle',
+        };
     }
 };
+
+export default bundle;

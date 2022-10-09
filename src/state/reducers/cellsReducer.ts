@@ -22,7 +22,7 @@ const initialState: CellsState = {
     data: {},
 };
 
-const randomId = (): string => Math.random().toString(36).substring(2, 5);
+const randomId = (): string => Math.random().toString(36).substr(2, 5);
 
 const reducer = produce((state: CellsState = initialState, action: Action) => {
     switch (action.type) {
@@ -30,25 +30,26 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
             const { id, content } = action.payload;
 
             state.data[id].content = content;
-            return;
+
+            return state;
         case ActionType.DELETE_CELL:
             delete state.data[action.payload];
             state.order = state.order.filter((id) => id !== action.payload);
 
-            return;
+            return state;
         case ActionType.MOVE_CELL:
             const { direction } = action.payload;
             const index = state.order.findIndex((id) => id === action.payload.id);
             const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
             if (targetIndex < 0 || targetIndex > state.order.length - 1) {
-                return;
+                return state;
             }
 
             state.order[index] = state.order[targetIndex];
             state.order[targetIndex] = action.payload.id;
 
-            return;
+            return state;
         case ActionType.INSERT_CELL_AFTER:
             const cell: Cell = {
                 content: '',
@@ -61,7 +62,7 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
             const foundIndex = state.order.findIndex((id) => id === action.payload.id);
 
             if (foundIndex < 0) {
-                state.order.push(cell.id);
+                state.order.unshift(cell.id);
             } else {
                 state.order.splice(foundIndex + 1, 0, cell.id);
             }
@@ -70,6 +71,6 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
         default:
             return state;
     }
-}, initialState);
+});
 
 export default reducer;
