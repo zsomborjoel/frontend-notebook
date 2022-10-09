@@ -1,3 +1,6 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-case-declarations */
 import produce from 'immer';
 import { ActionType } from '../action-types';
 import { Action } from '../actions';
@@ -18,6 +21,8 @@ const initialState: CellsState = {
     order: [],
     data: {},
 };
+
+const randomId = (): string => Math.random().toString(36).substring(2, 5);
 
 const reducer = produce((state: CellsState = initialState, action: Action) => {
     switch (action.type) {
@@ -44,7 +49,7 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
             state.order[targetIndex] = action.payload.id;
 
             return;
-        case ActionType.INSERT_CELL_BEFORE:
+        case ActionType.INSERT_CELL_AFTER:
             const cell: Cell = {
                 content: '',
                 type: action.payload.type,
@@ -58,15 +63,13 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
             if (foundIndex < 0) {
                 state.order.push(cell.id);
             } else {
-                state.order.splice(foundIndex, 0, cell.id);
+                state.order.splice(foundIndex + 1, 0, cell.id);
             }
 
             return state;
         default:
             return state;
     }
-});
-
-const randomId = () => Math.random().toString(36).substr(2, 5);
+}, initialState);
 
 export default reducer;

@@ -39,6 +39,11 @@ const html = `
     </html>
   `;
 
+/**
+ * Responsible to show code output on the screen
+ * @param param0
+ * @returns
+ */
 const Preview: React.FC<PreviewProps> = ({ code, err }) => {
     const iframe = useRef<any>();
 

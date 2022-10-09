@@ -13,6 +13,11 @@ interface CodeEditorProps {
     onChange(value: string): void;
 }
 
+/**
+ * Responsible to initialize the MonacoEditor on the screen
+ * @param param0
+ * @returns
+ */
 const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     const editorRef = useRef<any>();
 
